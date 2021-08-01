@@ -100,7 +100,7 @@ export default function Login() {
                  className="flex flex-row justify-center space-x-3 py-3 border border-blue-800 bg-white
                                         hover:bg-[#ECF4FE] text-center hover:ring-1 ring-blue-600 rounded-full
                                         ease-in duration-100 cursor-pointer">
-              <img alt={} width="20" className="my-auto"
+              <img alt={"google icon"} width="20" className="my-auto"
                    src="https://cdn.iconscout.com/icon/free/png-512/google-91-93413.png"/>
               <div className="text-md font-medium text-blue-600">Join with Google</div>
             </div>
