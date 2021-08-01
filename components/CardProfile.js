@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {selectUser} from "../states/reducer/userSlice";
+import {selectUser} from "/redux/reducer/userSlice";
 
 export function CardProfile(){
     const userState = useSelector(selectUser)

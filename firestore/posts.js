@@ -1,73 +1,63 @@
-import {db} from "../firebase";
-import {getAccount, getAccountsByUIDs} from "./accounts";
+import {db} from "/firebase";
+import {getAccountsByUIDs} from "./accounts";
 
 const postsColl = db.collection("posts");
 
 const createPost = ({uid, displayName, content, timestamp}) => {
-    return postsColl.add({
-        uid: uid,
-        displayName: displayName,
-        content: content,
-        timestamp: timestamp
+  return postsColl.add({
+    uid: uid,
+    displayName: displayName,
+    content: content,
+    timestamp: timestamp
+  });
+}
+
+const getPostsHelper = async (query, setter, lastPostSetter) => {
+  let results = [];
+
+  // Get Posts
+  const res = await query.get()
+  if (res.docs.length > 0) {
+    lastPostSetter(res.docs[res.docs.length - 1])
+  }
+  res.docs.forEach(post => {
+    let res = post.data();
+
+    // Modify timestamp to seconds
+    res.timestamp = res.timestamp.seconds;
+    results.push(res);
+  })
+
+  // Extract UIDs
+  const UIDs = new Set(results.map(doc => doc.uid));
+
+  // Get photoURL
+  await getAccountsByUIDs(Array.from(UIDs), account => {
+    results.map((result) => {
+      if (result.uid === account.uid) result.photoURL = account.photoURL;
     });
+  });
+
+  results.map(setter)
 }
 
-const getPostsHelper = async (query, setter) => {
-    let results = [];
+const getPosts = async (setter, lastPostSetter) => {
+  const query = postsColl
+      .orderBy("timestamp", "desc")
+      .limit(8)
 
-    // Get Posts
-    await query.get()
-        .then(res => res.docs.forEach(post => {
-            let res = post.data();
-
-            // Modify timestamp to seconds
-            res.timestamp = res.timestamp.seconds;
-            results.push(res);
-
-            // console.log("eachPost ==>", res)
-        }))
-
-    // Extract UIDs
-    const UIDs = new Set(results.map(doc => doc.uid));
-    // console.log("extract UIDs ==>", Array.from(UIDs));
-
-    // Get photoURL
-    await getAccountsByUIDs(Array.from(UIDs), account => {
-        results.map((result) => {
-            if (result.uid === account.uid) result.photoURL = account.photoURL;
-            // console.log(account, result);
-        });
-    });
-
-    // results.map(res => {
-    //     console.log("RES -->", res)
-    // })
-
-    results.map(setter)
+  await getPostsHelper(query, setter, lastPostSetter)
+      .catch(err => console.log("---- getPosts ----", err))
 }
 
-const getPosts = async (setter) => {
-    const query = postsColl
-        .orderBy("timestamp", "desc")
-        .limit(10)
+const getMorePosts = async (lastDoc, setter, lastPostSetter) => {
+  const query = postsColl
+      .orderBy("timestamp", "desc")
+      .startAfter(lastDoc)
+      .limit(8)
 
-    try {
-        await getPostsHelper(query, setter)
-    } catch (err) {
-        return err
-    }
-}
-
-const getMorePosts = async (lastDoc, setter) => {
-    const query = postsColl
-        .orderBy("timestamp", "desc")
-        .startAfter(lastDoc)
-        .limit(10)
-    try {
-        await getPostsHelper(query, setter)
-    } catch (err) {
-        return err
-    }
+  await getPostsHelper(query, setter, lastPostSetter)
+      .catch(err => console.log("---- getMorePosts ----", err))
 }
 
 export {createPost, getPosts, getMorePosts}

@@ -1,80 +1,69 @@
 import {CardCreatePost} from "./CardCreatePost";
 import {CardProfile} from "./CardProfile";
-import {CardPost} from "./CardPost";
 import {connect} from "react-redux";
-import {getMorePosts, getPosts} from "../firestore/posts";
-import {addPost, removeAllPosts} from "../states/reducer/postsSlice";
-import {Component} from "react";
+import {getMorePosts} from "/firestore/posts";
+import React from 'react'
+import {addLastPostSnapshot, addPost} from "/redux/reducer/postsSlice";
+import GroupPost from "./GroupPost"
 
+class AppBody extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
-class AppBody extends Component {
-    constructor(props) {
-        super(props);
-        // console.log(props)
-    }
+  getMore() {
+    getMorePosts(
+        this.props.lastPostSnapshotState.payload,
+        post => this.props.addPost(post),
+        lastPost => this.props.addLastPostSnapshot(lastPost)
+    ).catch(err => {
+      console.log("Error getting more post data:", err);
+    })
+  }
 
+  render() {
+    return <>
+      <div className={"min-h-screen bg-gray-100 pt-12"}>
 
-    componentDidMount() {
-        this.props.removeAllPosts();
-        getPosts(post => {
-            this.props.addPost(post);
-        }).catch(err => {
-            console.log("Error getting posts data:", err);
-        })
-    }
+        <div className="p-6 grid grid-cols-12 gap-x-6 container mx-auto flex justify-between">
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const isDifferentPage = this.state.currentPage !== prevState.currentPage
-        if (this.ste) {
-            const lastPost = this.props.postsState && this.props.postsState[this.props.postsState.length - 1];
+          {/* Profile Card */}
+          <div className="grid-cols-1 col-span-3">
+            <CardProfile/>
+          </div>
 
-            console.log("--- UPDATE ---")
-            getMorePosts(lastPost, post => {
-                this.props.addPost(post);
-            }).catch(err => {
-                console.log("Error getting posts data:", err);
-            })
-        }
-    }
-
-    render() {
-        return <>
-            <div className="bg-gray-100 p-6 grid grid-cols-12 justify-between gap-x-6">
-
-                {/* Profile Card */}
-                <div className="grid-cols-1 col-span-3">
-                    <CardProfile/>
-                </div>
-
-                {/* Body Card */}
-                <div className="grid-cols-1 gap-3 col-span-6 space-y-2">
-                    <CardCreatePost/>
-                    {this.props.postsState.map(post => <CardPost photoURL={post.photoURL}
-                                                                 displayName={post.displayName}
-                                                                 content={post.content}
-                                                                 timestamp={post.timestamp}/>
-                    )}
-                </div>
-
-                {/* Widget Card */}
-                <div className="grid-cols-1 col-span-3">
-                    <div className="rounded-md ring-gray-300 ring-1 p-2 w-3/12">
-                        <div className="h-40">
-                            Widget
-                        </div>
-                    </div>
-                </div>
+          {/* Body Card */}
+          <div className="grid-cols-1 gap-3 col-span-6 space-y-2">
+            <CardCreatePost/>
+            <GroupPost/>
+            <div onClick={() => this.getMore()} className={
+              `text-center text-md text-white bg-blue-400/70 rounded-md px-3 py-2
+               hover:bg-blue-400/50 hover:cursor-pointer`}
+            >
+              Load More
             </div>
-        </>
-    }
+          </div>
+
+          {/* Widget Card */}
+          <div className="grid-cols-1 col-span-3">
+            <div className="rounded-md ring-gray-300 ring-1 p-2 w-3/12">
+              <div className="h-40">
+                Widget
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  }
 }
 
 const mapStateToProps = state => ({
-    postsState: state.posts.posts
+  lastPostSnapshotState: state.posts.lastPostSnapshot
 });
 
 const mapDispatchToProps = () => {
-    return {addPost, removeAllPosts};
+  return {addPost, addLastPostSnapshot};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps())(AppBody)
