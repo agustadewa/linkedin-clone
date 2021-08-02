@@ -10,5 +10,5 @@ export default configureStore({
     posts: postsReducer
   },
   middleware: [thunk],
-  devTools: true
+  devTools: false
 });
