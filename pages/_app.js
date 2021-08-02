@@ -21,7 +21,7 @@ function App({Component, pageProps}) {
   return <>
     <Head>
       <title>Linkedin Clone</title>
-      <meta name="google-signin-client_id" content="linkedin-44a63.apps.googleusercontent.com"/>
+      <meta name="google-signin-client_id" content="974034574666-21hf2stbaaf881jtfut3dj44ccqh0kdg.apps.googleusercontent.com"/>
     </Head>
     <Provider store={store}>
       <Component {...pageProps} />
