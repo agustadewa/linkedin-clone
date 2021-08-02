@@ -13,7 +13,7 @@ class AppBody extends React.Component {
 
   getMore() {
     getMorePosts(
-        this.props.lastPostSnapshotState.payload,
+        this.props.lastPostSnapshotState?.payload,
         post => this.props.addPost(post),
         lastPost => this.props.addLastPostSnapshot(lastPost)
     ).catch(err => {

@@ -23,8 +23,8 @@ class GroupPost extends Component {
   render() {
     return <>
       {this.props.postsState.map(
-          (post, idx) => <CardPost
-              key={idx}
+          post => <CardPost
+              key={post.id}
               photoURL={post.photoURL}
               displayName={post.displayName}
               content={post.content}

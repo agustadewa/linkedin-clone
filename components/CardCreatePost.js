@@ -26,9 +26,10 @@ export function CardCreatePost() {
         <img width="45" className="rounded-full"
              src={userState.photoURL}
              alt=""/>
-        <div onClick={openModal} className="ease-in duration-150 active:bg-gray-300/70 bg-gray-300/30 my-auto p-3 px-4 rounded-full
-                                    w-full cursor-pointer border border-gray-400">
-          <div className="text-sm text-gray-500/90 active:text-gray-700 font-medium">Start a post</div>
+        <div onClick={openModal}
+             className="ease-in duration-150 active:bg-gray-300/70 focus:bg-gray-300/30 my-auto p-3 px-4 rounded-full
+                        w-full cursor-pointer border border-gray-400 hover:bg-gray-300/50">
+          <div className="text-sm text-gray-700/90 active:text-gray-700 font-medium">Start a post</div>
         </div>
       </div>
 

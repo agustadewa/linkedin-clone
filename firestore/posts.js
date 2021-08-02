@@ -22,7 +22,7 @@ const getPostsHelper = async (query, setter, lastPostSetter) => {
   }
   res.docs.forEach(post => {
     let res = post.data();
-
+    res.id = post.id;
     // Modify timestamp to seconds
     res.timestamp = res.timestamp.seconds;
     results.push(res);
@@ -44,17 +44,18 @@ const getPostsHelper = async (query, setter, lastPostSetter) => {
 const getPosts = async (setter, lastPostSetter) => {
   const query = postsColl
       .orderBy("timestamp", "desc")
-      .limit(8)
+      .limit(4)
 
   await getPostsHelper(query, setter, lastPostSetter)
       .catch(err => console.log("---- getPosts ----", err))
 }
 
 const getMorePosts = async (lastDoc, setter, lastPostSetter) => {
-  const query = postsColl
+  let query = postsColl
       .orderBy("timestamp", "desc")
-      .startAfter(lastDoc)
-      .limit(8)
+      .limit(4)
+
+  query = lastDoc ? query.startAfter(lastDoc) : query
 
   await getPostsHelper(query, setter, lastPostSetter)
       .catch(err => console.log("---- getMorePosts ----", err))

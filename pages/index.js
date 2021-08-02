@@ -1,14 +1,14 @@
-import Header from "/components/Header";
+import HeaderBar from "/components/HeaderBar";
 import AppBody from "/components/AppBody";
 import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from "next/router";
 import {doLogin, doLogout, selectUser} from "/redux/reducer/userSlice";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {auth} from "/firebase";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const userState = useSelector(selectUser)
+  const userState = useSelector(selectUser);
   const Router = useRouter();
 
   useEffect(() => {
@@ -19,11 +19,11 @@ export default function Home() {
           displayName: userAuth.displayName,
           email: userAuth.email,
           photoURL: userAuth.photoURL
-        }))
+        }));
 
       } else {
-        dispatch(doLogout())
-        Router.push("/login")
+        dispatch(doLogout());
+        Router.push("/login");
       }
     })
   }, [])
@@ -32,7 +32,7 @@ export default function Home() {
     {/* prevent flickering */}
     {userState ? <>
       <div>
-        <Header/>
+        <HeaderBar/>
         <AppBody/>
       </div>
     </> : null}

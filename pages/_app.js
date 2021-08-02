@@ -1,7 +1,8 @@
 import '/styles/globals.css'
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {Provider} from "react-redux";
 import store from "/redux/store/store";
+import Head from "next/head";
 
 function App({Component, pageProps}) {
 
@@ -18,6 +19,10 @@ function App({Component, pageProps}) {
 
 
   return <>
+    <Head>
+      <title>Linkedin Clone</title>
+      <meta name="google-signin-client_id" content="linkedin-44a63.apps.googleusercontent.com"/>
+    </Head>
     <Provider store={store}>
       <Component {...pageProps} />
     </Provider>

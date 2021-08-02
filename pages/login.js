@@ -106,7 +106,7 @@ export default function Login() {
             </div>
 
             <div className="py-1 text-md text-center">
-              Don't have account? <Link href="/signup">
+              Don&apos;t have account? <Link href="/signup">
               <a className="font-medium text-blue-700/90 hover:underline">Sign up</a></Link>
             </div>
           </form>

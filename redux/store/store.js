@@ -9,5 +9,6 @@ export default configureStore({
     user: userReducer,
     posts: postsReducer
   },
-  middleware: [thunk]
+  middleware: [thunk],
+  devTools: true
 });

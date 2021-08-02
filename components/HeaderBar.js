@@ -4,14 +4,14 @@ import MenuProfile from "./MenuProfile";
 import {useSelector} from "react-redux";
 import {selectUser} from "/redux/reducer/userSlice";
 
-export default function Header() {
+export default function HeaderBar() {
   const userState = useSelector(selectUser)
 
   return <>
-    <div className="fixed border-b-2 bg-white w-full">
-      <div className=" container mx-auto flex justify-between ">
+    <div className="fixed border-b-2 z-10 bg-white w-full">
+      <div className=" container mx-auto flex justify-between">
 
-        {/* Header left */}
+        {/* HeaderBar left */}
         <div className="flex mx-2 space-x-2">
           <img width="30" src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt=""/>
           <div className=" flex p-1 my-3 rounded-md px-3 space-x-2 bg-gray-200/60">
@@ -21,9 +21,9 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Header right */}
+        {/* HeaderBar right */}
         <div className="flex flex-row">
-          <div className={"grid grid-rows-1 grid-cols-6 text-center"}>
+          <div className="grid grid-rows-1 grid-cols-6 text-center">
             <MenuHeader Icon={Home} Title="Home"/>
             <MenuHeader Icon={SupervisorAccount} Title="My Network"/>
             <MenuHeader Icon={BusinessCenter} Title="Jobs"/>
